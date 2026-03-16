@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>Instagram AI Analyzer</title>
+
+<style>
+body {
+    font-family: 'Pretendard', sans-serif;
+    max-width: 1100px;
+    margin: 50px auto;
+    background: #f4f7f6;
+    color: #333;
+}
+.card {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+input, textarea {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+#submit-btn {
+    width: 100%;
+    padding: 15px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+}
+#result-display {
+    display: none;
+    margin-top: 30px;
+}
+.title-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+.res-title {
+    margin: 0;
+    font-size: 24px;
+    color: #000;
+}
+.result-container {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+.result-box {
+    flex: 1;
+    min-width: 300px;
+    background: #fff;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 20px;
+    position: relative;
+}
+.box-title {
+    font-weight: bold;
+    color: #007bff;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+}
+.summary-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    line-height: 1.8;
+}
+.summary-list > li {
+    margin-bottom: 12px;
+    font-weight: bold;
+}
+.summary-sub-list {
+    list-style: none;
+    padding-left: 15px;
+    font-weight: normal;
+    color: #444;
+    margin-bottom: 10px;
+}
+.content-area {
+    line-height: 1.7;
+    white-space: pre-wrap;
+}
+.detail-box { border-color: #007bff; }
+.summary-box { border-color: #28a745; }
+.small-copy-btn {
+    background: #f0f0f0;
+    border: 1px solid #ccc;
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 11px;
+}
+.small-copy-btn:hover { background: #e0e0e0; }
+.tag {
+    display: inline-block;
+    background: #e1f5fe;
+    color: #01579b;
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin-right: 5px;
+    font-size: 12px;
+    margin-top: 5px;
+}
+#refresh-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: white;
+    border: 1px solid #ddd;
+    padding: 10px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+}
+#refresh-btn:hover { background: #f0f0f0; }
+</style>
+</head>
+
+<body>
+
+<button id="refresh-btn" onclick="refreshPage()">🔄 새로 입력</button>
+
+<div class="card">
+
+<h2>🗨️ 메신저 링크 요약</h2>
+
+<form id="form">
+<input type="text" id="url" placeholder="인스타그램 URL을 입력하세요" required>
+<textarea id="message" rows="2" placeholder="AI에게 전달할 추가 메모"></textarea>
+<button type="submit" id="submit-btn">분석 시작하기</button>
+</form>
+
+<div id="result-display">
+
+<div class="title-section">
+<h3 id="res-title" class="res-title"></h3>
+<button class="small-copy-btn" onclick="copyText('res-title', this)">제목 복사</button>
+</div>
+
+<div class="result-container">
+
+<div class="result-box detail-box">
+<div class="box-title">
+🔍 상세 리포트
+<button class="small-copy-btn" onclick="copyText('res-detail', this)">복사</button>
+</div>
+<div id="res-detail" class="content-area"></div>
+</div>
+
+<div class="result-box summary-box">
+<div class="box-title">
+✨ 핵심 요약
+<button class="small-copy-btn" onclick="copyFormattedSummary(this)">복사</button>
+</div>
+
+<ul class="summary-list" id="res-summary-list"></ul>
+
+</div>
+</div>
+</div>
+</div>
+
+<script>
+let latestResult = null;
+
+document.getElementById("form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById("submit-btn");
+    const display = document.getElementById("result-display");
+
+    btn.innerText = "데이터 분석 중...";
+    btn.disabled = true;
+    display.style.display = "none";
+
+    try {
+        const urlValue = document.getElementById("url").value.trim();
+        const response = await fetch("/submit", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                url: urlValue,
+                message: document.getElementById("message").value
+            })
+        });
+
+        const result = await response.json();
+
+if (result.status === "ok") {
+            const info = result.data;
+            latestResult = info; 
+
+            document.getElementById("res-title").innerText = info.subject || "분석 리포트";
+            document.getElementById("res-detail").innerText = info.detailed_analysis || "";
+
+            const tagsHTML = (info.tags || []).map(t => `<span class="tag">#${t}</span>`).join("");
+
+            const summaryList = info.summary_data || [];
+            let summaryHTML = "";
+            summaryList.forEach((item, index) => {
+                summaryHTML += `
+<li>- 내용 ${index + 1}:
+<ul class="summary-sub-list">
+<li>(1) 제품 명: ${item.product_name || "정보 없음"}</li>
+<li>(2) 판매처: ${item.location || "정보 없음"}</li>
+<li>(3) 맛: ${item.taste || "정보 없음"}</li>
+<li>(4) 특징: ${item.features || "정보 없음"}</li>
+<li>(5) 가격: ${item.price || "정보 없음"}</li>
+</ul>
+</li>
+`;
+            });
+
+            document.getElementById("res-summary-list").innerHTML = `
+<li>- 카테고리: ${info.main_category || "정보 없음"}</li>
+${summaryHTML}
+<li>- 태그:<br>${tagsHTML}</li>
+<li>- 원본 URL:<br>${urlValue}</li>
+`;
+
+            display.style.display = "block";
+
+        } else {
+            alert("에러: " + result.details);
+        }
+
+    } catch (err) {
+        alert("에러 : " + err);
+    } finally {
+        btn.innerText = "분석 시작하기";
+        btn.disabled = false;
+    }
+});
+
+function copyText(id, btn) {
+    const text = document.getElementById(id)?.innerText || "";
+    copyToClipboard(text, btn);
+}
+
+function copyFormattedSummary(btn) {
+    if (!latestResult) return;
+
+    const urlValue = document.getElementById("url")?.value || "";
+    const category = latestResult.main_category || "정보 없음";
+    const tags = (latestResult.tags || []).map(t => `#${t}`).join(" ") || "없음";
+
+    let formattedText = `- 카테고리: ${category}\n`;
+
+    latestResult.summary_data.forEach((item, idx) => {
+        formattedText += `- 내용 ${idx + 1}:\n`;
+        formattedText += `  (1) 제품 명: ${item.product_name || "정보 없음"}\n`;
+        formattedText += `  (2) 판매처: ${item.location || "정보 없음"}\n`;
+        formattedText += `  (3) 맛: ${item.taste || "정보 없음"}\n`;
+        formattedText += `  (4) 특징: ${item.features || "정보 없음"}\n`;
+        formattedText += `  (5) 가격: ${item.price || "정보 없음"}\n`;
+    });
+
+    formattedText += `- 태그: ${tags}\n`;
+    formattedText += `- 원본 URL: ${urlValue}`;
+
+    copyToClipboard(formattedText, btn);
+}
+
+function copyToClipboard(text, btn) {
+    if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(() => showCopyMessage(btn));
+    } else {
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+        document.body.appendChild(textarea);
+        textarea.focus();
+        textarea.select();
+        try {
+            document.execCommand("copy");
+            showCopyMessage(btn);
+        } catch (err) {
+            alert("복사 실패");
+        }
+        document.body.removeChild(textarea);
+    }
+}
+
+function showCopyMessage(btn) {
+    const original = btn.innerText;
+    btn.innerText = "복사 완료 ✓";
+    setTimeout(() => { btn.innerText = original; }, 1500);
+}
+
+function refreshPage() {
+    location.reload();
+}
+</script>
+
+</body>
+</html>
