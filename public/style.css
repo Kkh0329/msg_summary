@@ -1,0 +1,162 @@
+body {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+    max-width: 1100px;
+    margin: 50px auto;
+    background: #f4f7f6;
+    color: #333;
+}
+
+.card {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+/* 제목과 버튼 레이아웃 */
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 15px; 
+    margin-bottom: 20px;
+}
+
+.card-header h2 {
+    margin: 0;
+}
+
+#refresh-btn {
+    background: white;
+    border: 1px solid #ddd;
+    padding: 6px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+#refresh-btn:hover {
+    background: #f8f9fa;
+    border-color: #ccc;
+}
+
+/* 입력 폼 스타일 */
+input, textarea {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+#submit-btn {
+    width: 100%;
+    padding: 15px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+/* 결과 표시 영역 */
+#result-display {
+    display: none;
+    margin-top: 30px;
+}
+
+.title-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.res-title {
+    margin: 0;
+    font-size: 24px;
+    color: #000;
+}
+
+.result-container {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.result-box {
+    flex: 1;
+    min-width: 300px;
+    background: #fff;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 20px;
+    position: relative;
+}
+
+.box-title {
+    font-weight: bold;
+    color: #007bff;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.summary-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    line-height: 1.8;
+}
+
+.summary-list > li {
+    margin-bottom: 12px;
+    font-weight: bold;
+}
+
+.summary-sub-list {
+    list-style: none;
+    padding-left: 15px;
+    font-weight: normal;
+    color: #444;
+    margin-bottom: 10px;
+}
+
+.content-area {
+    line-height: 1.7;
+    white-space: pre-wrap;
+}
+
+.detail-box { border-color: #007bff; }
+.summary-box { border-color: #28a745; }
+
+/* 공통 버튼 및 태그 */
+.small-copy-btn {
+    background: #f0f0f0;
+    border: 1px solid #ccc;
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 11px;
+}
+
+.small-copy-btn:hover { background: #e0e0e0; }
+
+.tag {
+    display: inline-block;
+    background: #e1f5fe;
+    color: #01579b;
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin-right: 5px;
+    font-size: 12px;
+    margin-top: 5px;
+}

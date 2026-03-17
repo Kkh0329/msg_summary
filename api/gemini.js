@@ -40,9 +40,9 @@ Input Data:
 
 Required JSON Format:
 {
-  "subject": "분석 주제 (가급적 제품명 혹은 핵심 주제)",
+  "subject": "제품명 혹은 제품명 - 판매처",
   "main_category": "음료/디저트/ETC 중 택 1",
-  "detailed_analysis": "전체적인 분석 내용을 5~6문장으로 서술",
+  "detailed_analysis": "음식/음료와 관련된 모든 내용을 요약하되, CEO’s Directive을 반영하여 CEO’s Directive와 영상 내용을 유기적으로 결합한 5~6줄 분량의 상세 분석 리포트를 작성. 제품명/원료명/판매처/가게이름/특징/가격이 포함되어야 함.",
   "summary_data": [
     {
       "product_name": "제품명 혹은 원료명",
@@ -50,7 +50,7 @@ Required JSON Format:
       "taste": "맛 혹은 성분 특징",
       "features": "특이사항 또는 의견",
       "price": "가격",
-      "instructions": "입력받은 CEO’s Directive를 이 항목에 맞게 요약하여 기재. 입력값이 없으면 '없음'으로 반환"
+      "instructions": "입력받은 CEO’s Directive를 요약하여 기재. 또한 CEO’s Directive를 그대로 반환하지 말고, 문장을 다듬어서 기재. 입력값이 없으면 '없음'으로 반환"
     }
   ],
   "tags": ["태그1", "태그2"]
