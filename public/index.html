@@ -140,10 +140,10 @@ input, textarea {
 
 <div class="card">
 
-<h2>🗨️ 메신저 링크 요약</h2>
+<h2>🗨️ 메신저 요약</h2>
 
 <form id="form">
-<input type="text" id="url" placeholder="인스타그램 URL을 입력하세요" required>
+<input type="text" id="url" placeholder="인스타그램 URL을 입력하세요">
 <textarea id="message" rows="2" placeholder="AI에게 전달할 추가 메모"></textarea>
 <button type="submit" id="submit-btn">분석 시작하기</button>
 </form>
@@ -223,6 +223,7 @@ if (result.status === "ok") {
 <li>(3) 맛: ${item.taste || "정보 없음"}</li>
 <li>(4) 특징: ${item.features || "정보 없음"}</li>
 <li>(5) 가격: ${item.price || "정보 없음"}</li>
+<li style="color: #d9534f; font-weight: bold;">(6) 지시사항: ${item.instructions || "정보 없음"}</li>
 </ul>
 </li>
 `;
@@ -270,6 +271,7 @@ function copyFormattedSummary(btn) {
         formattedText += `  (3) 맛: ${item.taste || "정보 없음"}\n`;
         formattedText += `  (4) 특징: ${item.features || "정보 없음"}\n`;
         formattedText += `  (5) 가격: ${item.price || "정보 없음"}\n`;
+        formattedText += `  (6) 지시사항: ${item.instructions || "정보 없음"}\n`; 
     });
 
     formattedText += `- 태그: ${tags}\n`;

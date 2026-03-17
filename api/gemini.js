@@ -23,12 +23,20 @@ Rules:
    - Price: If not mentioned, return "정보 없음".
    - Summary Data: Always return an array of objects, even for a single product.
    - The 'tags' key must contain a combined list of Instagram-provided tags and additional keywords inferred and extracted by the model.
+4. Output must be strictly valid JSON.
+5. Do not wrap JSON in markdown.
+6. Do not output any text before or after JSON.   
+7. MESSAGE MAPPING:
+   - Read the 'CEO's Instruction' (CEO’s Directive).
+   - Identify which product from the extracted list is most relevant to this instruction.
+   - For the RELEVANT product, put the CEO's instruction in the "instructions" field.
+   - If the instruction is general or doesn't match any specific product, apply it to the most relevant one or all, but ALWAYS keep the full list of products.
 
 Input Data:
-- User's Specific Message/Memo: ${data.message || "None"}
+- CEO’s Directive: ${data.message || "None"}
 - Instagram Caption: ${cleanedCaption}
 - Video Transcript: ${cleanedTranscript}
-- Image Context: ${cleanedAlt}
+- Image/Video Context: ${cleanedAlt}
 
 Required JSON Format:
 {
@@ -41,7 +49,8 @@ Required JSON Format:
       "location": "판매처/원산지/가게이름",
       "taste": "맛 혹은 성분 특징",
       "features": "특이사항 또는 의견",
-      "price": "가격"
+      "price": "가격",
+      "instructions": "입력받은 CEO’s Directive를 이 항목에 맞게 요약하여 기재. 입력값이 없으면 '없음'으로 반환"
     }
   ],
   "tags": ["태그1", "태그2"]
@@ -54,7 +63,7 @@ Required JSON Format:
             {
                 contents: [{ parts: [{ text: prompt }] }],
                 generationConfig: {
-                    maxOutputTokens: 2048,
+                    maxOutputTokens: 4096,
                     temperature: 0.1
                 }
             }
