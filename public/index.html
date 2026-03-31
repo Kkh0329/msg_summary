@@ -87,10 +87,9 @@
                             <ul class="summary-sub-list">
                                 <li>(1) 제품 명: ${item.product_name || "정보 없음"}</li>
                                 <li>(2) 판매처: ${item.location || "정보 없음"}</li>
-                                <li>(3) 맛: ${item.taste || "정보 없음"}</li>
-                                <li>(4) 특징: ${item.features || "정보 없음"}</li>
-                                <li>(5) 가격: ${item.price || "정보 없음"}</li>
-                                <li style="color: #d9534f; font-weight: bold;">(6) 지시사항: ${item.instructions || "정보 없음"}</li>
+                                <li>(3) 특징: ${item.features || "정보 없음"}</li>
+                                <li>(4) 가격: ${item.price || "정보 없음"}</li>
+                                <li style="color: #d9534f; font-weight: bold;">(5) 지시사항: ${item.instructions || "정보 없음"}</li>
                             </ul>
                         </li>`;
                 });
@@ -98,7 +97,7 @@
                 document.getElementById("res-summary-list").innerHTML = `
                     <li>- 카테고리: ${info.main_category || "정보 없음"}</li>
                     ${summaryHTML}
-                    <li>- 태그:<br>${tagsHTML}</li>
+                    <li>- 키워드:<br>${tagsHTML}</li>
                     <li>- 원본 URL:<br>${urlValue}</li>
                 `;
 
@@ -132,13 +131,12 @@
             formattedText += `\n- 내용 ${idx + 1}:\n`;
             formattedText += `  (1) 제품 명: ${item.product_name || "정보 없음"}\n`;
             formattedText += `  (2) 판매처: ${item.location || "정보 없음"}\n`;
-            formattedText += `  (3) 맛: ${item.taste || "정보 없음"}\n`;
-            formattedText += `  (4) 특징: ${item.features || "정보 없음"}\n`;
-            formattedText += `  (5) 가격: ${item.price || "정보 없음"}\n`;
-            formattedText += `  (6) 지시사항: ${item.instructions || "정보 없음"}\n`; 
+            formattedText += `  (3) 특징: ${item.features || "정보 없음"}\n`;
+            formattedText += `  (4) 가격: ${item.price || "정보 없음"}\n`;
+            formattedText += `  (5) 지시사항: ${item.instructions || "정보 없음"}\n`; 
         });
 
-        formattedText += `\n- 태그: ${tags}\n`;
+        formattedText += `\n- 키워드: ${tags}\n`;
         formattedText += `\n- 원본 URL: ${urlValue}`;
 
         copyToClipboard(formattedText, btn);
