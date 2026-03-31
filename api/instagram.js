@@ -18,7 +18,6 @@ async function getInstagramData(url) {
         }
 
         const post = response.data[0];
-
         return {
             caption: post.caption || "",
             altText: post.alt || "",
